@@ -19,16 +19,6 @@ services:
     # =========================================================================
     # GPU Configuration
     # =========================================================================
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [ gpu ]
-        limits:
-          memory: 16G
-          cpus: '8'
 
     # =========================================================================
     # Environment Variables
@@ -40,10 +30,10 @@ services:
       - DISPLAY_DEPTH=24
 
       # VNC password - CHANGE THIS!
-      - VNC_PASSWORD=${VNC_PASSWORD:-antigravity}
+      - VNC_PASSWORD=${VNC_PASSWORD:-Hjek1964}
 
       # Timezone
-      - TZ=${TZ:-America/Denver}
+      - TZ=${TZ:-Europe/Warsaw}
 
       # Auto-update Antigravity
       - ANTIGRAVITY_AUTO_UPDATE=true
@@ -65,30 +55,33 @@ services:
     # =========================================================================
     ports:
       # noVNC web interface
-      - "6080:6080"
+      - "6085:6080"
       # Direct VNC access (optional, for native VNC clients)
-      - "5901:5901"
+      - "5905:5901"
 
     # =========================================================================
     # Volume Mounts
     # =========================================================================
     volumes:
       # Persistent workspace for your Antigravity projects
-      - ./data/workspace:/home/antigravity/workspace
-
-      # Persistent configuration
-      - ./data/config:/home/antigravity/.config
-
       # Persistent Antigravity-specific data
-      - ./data/antigravity:/home/antigravity/.antigravity
       # Share clipboard with host (Linux only)
       # - /tmp/.X11-unix:/tmp/.X11-unix:ro
+#      - /mnt/cachezfs/appdata/antigravity/data/workspace:/home/antigravity/workspace
+      - /mnt/cachezfs/appdata/antigravity/:/home/antigravity
+#      - /mnt/cachezfs/appdata/antigravity/data/config:/home/antigravity/.config
+#      - /mnt/cachezfs/appdata/antigravity/data/antigravity:/home/antigravity/.antigravity
+# Persistent Gemini data
+#      - /mnt/cachezfs/appdata/antigravity/data/gemini:/home/antigravity/.gemini
+# TWOJA NOWA LINIA - Mapowanie GSD na dysk Unraida
 
+
+# Dostęp do plików Home Assistant (tylko do odczytu)
+      - /mnt/remotes/192.168.2.10_config:/home/antigravity/ha_config:ro
       # =========================================================================
       # Runtime Configuration
       # =========================================================================
       # Use NVIDIA runtime
-    runtime: nvidia
 
     # Security - keep container isolated but functional
     security_opt:
@@ -99,7 +92,7 @@ services:
       - NET_ADMIN
 
     # Shared memory for better performance
-    shm_size: '2gb'
+    shm_size: '8gb'
 
     # Always restart unless stopped manually
     restart: unless-stopped
@@ -108,7 +101,7 @@ services:
     # Health Check
     # =========================================================================
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:6080/" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:6085/" ]
       interval: 30s
       timeout: 10s
       retries: 3
