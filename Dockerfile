@@ -93,6 +93,12 @@ RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor
     && apt-get install -y google-chrome-stable \
     && rm -rf /var/lib/apt/lists/*
 
+# Instalacja Node.js 20.x (najnowsze LTS)
+RUN apt-get update && apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs
+
+
 # =============================================================================
 # Locale Configuration
 # =============================================================================
@@ -125,6 +131,8 @@ RUN mkdir -p /etc/apt/keyrings \
     && apt-get install -y antigravity \
     && rm -rf /var/lib/apt/lists/*
 
+
+
 # =============================================================================
 # Create Non-Root User
 # =============================================================================
@@ -152,6 +160,10 @@ RUN chmod +x /opt/scripts/*.sh
 RUN echo 'APT::Periodic::Update-Package-Lists "1";' > /etc/apt/apt.conf.d/20auto-upgrades \
     && echo 'APT::Periodic::Unattended-Upgrade "1";' >> /etc/apt/apt.conf.d/20auto-upgrades \
     && echo 'Unattended-Upgrade::Allowed-Origins { "antigravity-auto-updater-dev:antigravity-debian"; };' > /etc/apt/apt.conf.d/50unattended-upgrades
+
+
+
+
 
 # =============================================================================
 # Exposed Ports
