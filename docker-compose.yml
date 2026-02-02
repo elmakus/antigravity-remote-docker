@@ -30,7 +30,7 @@ services:
       - DISPLAY_DEPTH=24
 
       # VNC password - CHANGE THIS!
-      - VNC_PASSWORD=${VNC_PASSWORD:-Hjek1964}
+      - VNC_PASSWORD=${VNC_PASSWORD:-xxx}
 
       # Timezone
       - TZ=${TZ:-Europe/Warsaw}
